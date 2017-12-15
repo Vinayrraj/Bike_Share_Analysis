@@ -32,9 +32,9 @@ def print_first_point(filename):
     return (city, first_trip)
 
 # list of files for each city
-data_files = ['/Users/Singh/Documents/PythonWorkspace/Machine Learning/BikeShareAnalysis/data/NYC-CitiBike-2016.csv',
-              '/Users/Singh/Documents/PythonWorkspace/Machine Learning/BikeShareAnalysis/data/Chicago-Divvy-2016.csv',
-              '/Users/Singh/Documents/PythonWorkspace/Machine Learning/BikeShareAnalysis//data/Washington-CapitalBikeshare-2016.csv',]
+data_files = ['/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/data/NYC-CitiBike-2016.csv',
+              '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/data/Chicago-Divvy-2016.csv',
+              '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/data/Washington-CapitalBikeshare-2016.csv',]
 
 
 # print the first trip from each file, store in dictionary
@@ -43,7 +43,7 @@ for data_file in data_files:
     city, first_trip = print_first_point(data_file)
     example_trips[city] = first_trip
 
-
+print("-"*30)
 
 def duration_in_mins(datum, city):
     """
@@ -78,3 +78,49 @@ tests = {'NYC': 13.9833,
 
 for city in tests:
     assert abs(duration_in_mins(example_trips[city], city) - tests[city]) < .001
+
+print("-"*30)
+
+from datetime import datetime
+#time.strftime(fmt, d.timetuple())
+def time_of_trip(datum, city):
+    """
+    Takes as input a dictionary containing info about a single trip (datum) and
+    its origin city (city) and returns the month, hour, and day of the week in
+    which the trip was made.
+
+    Remember that NYC includes seconds, while Washington and Chicago do not.
+
+    HINT: You should use the datetime module to parse the original date
+    strings into a format that is useful for extracting the desired information.
+    see https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
+    """
+
+    # YOUR CODE HERE
+    dt = None
+
+    if city == "NYC":
+        dt = datetime.strptime(datum['starttime'], "%m/%d/%Y %H:%M:%S")
+    elif city == "Chicago":
+        dt = datetime.strptime(datum['starttime'], "%m/%d/%Y %H:%M")
+    elif city == "Washington":
+        dt = datetime.strptime(datum['Start date'], "%m/%d/%Y %H:%M")
+
+    month = dt.strftime("%m")
+    hour = dt.strftime("%H")
+    day_of_week = dt.strftime("%A")
+
+    return (int(month), int(hour), day_of_week)
+
+
+# Some tests to check that your code works. There should be no output if all of
+# the assertions pass. The `example_trips` dictionary was obtained from when
+# you printed the first trip from each of the original data files.
+tests = {'NYC': (1, 0, 'Friday'),
+         'Chicago': (3, 23, 'Thursday'),
+         'Washington': (3, 22, 'Thursday')}
+
+for city in tests:
+    #print(time_of_trip(example_trips[city], city))
+    #print(tests[city])
+    assert time_of_trip(example_trips[city], city) == tests[city]
