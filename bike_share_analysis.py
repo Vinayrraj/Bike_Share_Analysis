@@ -214,5 +214,95 @@ city_info = {'Washington': {'in_file': '/Users/Singh/Documents/PythonWorkspace/M
                      'out_file': '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/data/NYC-2016-Summary.csv'}}
 
 for city, filenames in city_info.items():
-    condense_data(filenames['in_file'], filenames['out_file'], city)
+    # TODO un Comment below line if runnung for first time
+    #condense_data(filenames['in_file'], filenames['out_file'], city)
     print_first_point(filenames['out_file'])
+
+print("***"*15)
+
+def number_of_trips(filename):
+    """
+    This function reads in a file with trip data and reports the number of
+    trips made by subscribers, customers, and total overall.
+    """
+    with open(filename, 'r') as f_in:
+        # set up csv reader object
+        reader = csv.DictReader(f_in)
+
+        # initialize count variables
+        n_subscribers = 0
+        n_customers = 0
+
+        # tally up ride types
+        for row in reader:
+            if row['user_type'] == 'Subscriber':
+                n_subscribers += 1
+            else:
+                n_customers += 1
+
+        # compute total number of rides
+        n_total = n_subscribers + n_customers
+
+        # return tallies as a tuple
+        return(n_subscribers, n_customers, n_total)
+
+print("***"*15)
+
+
+    ## Modify this and the previous cell to answer Question 4a. Remember to run ##
+## the function on the cleaned data files you created from Question 3.      ##
+
+data_file = '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/data/Chicago-2016-Summary.csv'
+print("Chicago:")
+print(number_of_trips(data_file))
+
+data_file = '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/data/NYC-2016-Summary.csv'
+print("NYC:")
+print(number_of_trips(data_file))
+
+data_file = '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/data/Washington-2016-Summary.csv'
+print("Washington:")
+print(number_of_trips(data_file))
+
+print("***"*15)
+
+def average_trip_length_with_protion_of_trips_longer_than_30_min(filename):
+    """
+    This function reads in a file with trip data and reports the number of
+    trips made by subscribers, customers, and total overall.
+    """
+    with open(filename, 'r') as f_in:
+        # set up csv reader object
+        reader = csv.DictReader(f_in)
+
+        # initialize count variables
+        n_total_trips = 0
+        n_total_length = 0
+        n_trips_longer_than_30_min = 0
+
+        # tally up ride types
+        for row in reader:
+            duration = float(row['duration'])
+            n_total_trips+=1
+            n_total_length+=duration
+            if(duration>30):
+                n_trips_longer_than_30_min+=1
+
+    # return tallies as a tuple
+    return(n_total_length/n_total_trips, n_trips_longer_than_30_min/n_total_trips)
+
+data_file = '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/examples/BayArea-Y3-Summary.csv'
+print("Bay Area Example:")
+print(average_trip_length_with_protion_of_trips_longer_than_30_min(data_file))
+
+data_file = '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/data/Chicago-2016-Summary.csv'
+print("Chicago:")
+print(average_trip_length_with_protion_of_trips_longer_than_30_min(data_file))
+
+data_file = '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/data/NYC-2016-Summary.csv'
+print("NYC:")
+print(average_trip_length_with_protion_of_trips_longer_than_30_min(data_file))
+
+data_file = '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/data/Washington-2016-Summary.csv'
+print("Washington:")
+print(average_trip_length_with_protion_of_trips_longer_than_30_min(data_file))
