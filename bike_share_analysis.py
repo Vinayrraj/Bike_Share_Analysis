@@ -252,17 +252,19 @@ print("***"*15)
     ## Modify this and the previous cell to answer Question 4a. Remember to run ##
 ## the function on the cleaned data files you created from Question 3.      ##
 
-data_file = '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/data/Chicago-2016-Summary.csv'
+data_file_sample = '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/examples/BayArea-Y3-Summary.csv'
+data_file_chicago = '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/data/Chicago-2016-Summary.csv'
+data_file_nyc = '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/data/NYC-2016-Summary.csv'
+data_file_washington = '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/data/Washington-2016-Summary.csv'
+
 print("Chicago:")
-print(number_of_trips(data_file))
+print(number_of_trips(data_file_chicago))
 
-data_file = '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/data/NYC-2016-Summary.csv'
 print("NYC:")
-print(number_of_trips(data_file))
+print(number_of_trips(data_file_nyc))
 
-data_file = '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/data/Washington-2016-Summary.csv'
 print("Washington:")
-print(number_of_trips(data_file))
+print(number_of_trips(data_file_washington))
 
 print("***"*15)
 
@@ -291,18 +293,88 @@ def average_trip_length_with_protion_of_trips_longer_than_30_min(filename):
     # return tallies as a tuple
     return(n_total_length/n_total_trips, n_trips_longer_than_30_min/n_total_trips)
 
-data_file = '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/examples/BayArea-Y3-Summary.csv'
+
 print("Bay Area Example:")
-print(average_trip_length_with_protion_of_trips_longer_than_30_min(data_file))
+print(average_trip_length_with_protion_of_trips_longer_than_30_min(data_file_sample))
 
-data_file = '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/data/Chicago-2016-Summary.csv'
 print("Chicago:")
-print(average_trip_length_with_protion_of_trips_longer_than_30_min(data_file))
+print(average_trip_length_with_protion_of_trips_longer_than_30_min(data_file_chicago))
 
-data_file = '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/data/NYC-2016-Summary.csv'
 print("NYC:")
-print(average_trip_length_with_protion_of_trips_longer_than_30_min(data_file))
+print(average_trip_length_with_protion_of_trips_longer_than_30_min(data_file_nyc))
 
-data_file = '/Users/Singh/Documents/PythonWorkspace/Machine Learning/Bike_Share_Analysis/data/Washington-2016-Summary.csv'
 print("Washington:")
-print(average_trip_length_with_protion_of_trips_longer_than_30_min(data_file))
+print(average_trip_length_with_protion_of_trips_longer_than_30_min(data_file_washington))
+
+print("***"*15)
+
+def average_trip_length_for_user_type(filename):
+    """
+    This function reads in a file with trip data and reports the number of
+    trips made by subscribers, customers, and total overall.
+    """
+    with open(filename, 'r') as f_in:
+        # set up csv reader object
+        reader = csv.DictReader(f_in)
+
+        # initialize count variables
+        n_total_trips_subscriber = 0
+        n_total_trips_customer = 0
+
+        n_duration_trip_subscriber = 0
+        n_duration_trip_customer = 0
+
+        # tally up ride types
+        for row in reader:
+            duration = float(row['duration'])
+            if(row["user_type"]=="Customer"):
+                n_total_trips_customer+=1
+                n_duration_trip_customer+=duration
+            else:
+                n_total_trips_subscriber+=1
+                n_duration_trip_subscriber+=duration
+
+
+    percent_for_subscriber = n_duration_trip_subscriber/n_total_trips_subscriber
+    percent_for_customer = n_duration_trip_customer/n_total_trips_customer
+    # return tallies as a tuple
+    return(percent_for_subscriber,percent_for_customer)
+
+print("Bay Area Example:")
+print(average_trip_length_for_user_type(data_file_sample))
+
+print("Chicago:")
+print(average_trip_length_for_user_type(data_file_chicago))
+
+print("NYC:")
+print(average_trip_length_for_user_type(data_file_nyc))
+
+print("Washington:")
+print(average_trip_length_for_user_type(data_file_washington))
+
+print("***"*15)
+
+# load library
+
+
+'''
+import matplotlib.pyplot as plt
+
+# this is a 'magic word' that allows for plots to be displayed
+# inline with the notebook. If you want to know more, see:
+# http://ipython.readthedocs.io/en/stable/interactive/magics.html
+%matplotlib inline
+
+# example histogram, data taken from bay area sample
+data = [ 7.65,  8.92,  7.42,  5.50, 16.17,  4.20,  8.98,  9.62, 11.48, 14.33,
+        19.02, 21.53,  3.90,  7.97,  2.62,  2.67,  3.08, 14.40, 12.90,  7.83,
+        25.12,  8.30,  4.93, 12.43, 10.60,  6.17, 10.88,  4.78, 15.15,  3.53,
+         9.43, 13.32, 11.72,  9.85,  5.22, 15.10,  3.95,  3.17,  8.78,  1.88,
+         4.55, 12.68, 12.38,  9.78,  7.63,  6.45, 17.38, 11.90, 11.52,  8.63,]
+plt.hist(data)
+plt.title('Distribution of Trip Durations')
+plt.xlabel('Duration (m)')
+plt.show()
+'''
+
+print("***"*15)
